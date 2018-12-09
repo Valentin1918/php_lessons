@@ -1,30 +1,52 @@
 <?php
 function parseUrl($url)
 {
-    echo $url;
+    if (gettype($url) !== 'string' || !strlen($url)) return null;
+    $point = '.';
     $parsedUrl = parse_url($url);
-    ['scheme' => $scheme, 'host' => $host] = $parsedUrl;
-    echo $scheme;
-    $hostParts = explode('.', $host);
-    $subdomain = $hostParts[0];
-    $additionalUrlParts = compact('subdomain');
+    ['host' => $host, 'path' => $path, 'query' => $query] = $parsedUrl;
+    $hostParts = explode($point, $host);
+    $subDomain = array_shift($hostParts);
+    $domain = implode($point, $hostParts);
+    array_shift($hostParts);
+    $topLevelDomain = implode($point, $hostParts);
+    $topLevelDomain = "$point$topLevelDomain";
+    $varNames = ['subDomain', 'domain', 'topLevelDomain'];
+    if ($path && (strlen($path) > 1 || $query)) {
+        $resource = "$path$query";
+        array_push($varNames, 'resource');
+    }
+    $pathParts = explode($point, $path);
+    if ($pathParts[1]) {
+        $fileExtension = "$point$pathParts[1]";
+        array_push($varNames, 'fileExtension');
+    }
+    $additionalUrlParts = compact(...$varNames);
     return array_merge($parsedUrl, $additionalUrlParts);
 }
 
-$parsedUrl = parseUrl('http://www.google.com.ua/?usedId=123&file=trololo.txt'); //PHP_URL_QUERY
-$parsedUrl2 = parseUrl('http://www.google.com.ua/file.txt'); //PHP_URL_QUERY
+$defaultUrl = 'http://www.google.com.ua/file.txt?usedId=123#somehash';
+$shortOptions = 'u:';
+$longOptions = ['url:'];
+$urlCliVar = array_values(getopt($shortOptions, $longOptions))[0];
+$urlCli = $urlCliVar ?: $argv[1];
+if (!$urlCli) var_dump('Please specify an URl in CLI variable. Otherwise will be used a default one.');
+$parsedUrl = parseUrl($urlCli ?: $defaultUrl);
 var_export($parsedUrl);
-var_export($parsedUrl2);
 /*
 - scheme (http)
 - host (www.google.com.ua)
-
 - subdomain (www)
 - domain (google.com.ua)
 - top level domain (.com.ua)
-
 - resource (/search?q=...)
 - file suffix/extension (.html/.pdf)
-- query string
-- hash
+- query string = query
+- hash = fragment
+ */
+
+/* CLI variables:
+http://php.net/manual/ru/reserved.variables.argv.php
+http://php.net/manual/ru/reserved.variables.argc.php
+http://php.net/manual/ru/function.getopt.php
  */
