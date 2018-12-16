@@ -1,0 +1,6 @@
+T(n) = c1(2n - 1) + c2(n - 1) + c3(n - 1) + c4(n - 1) + c5(n - 1);
+T(m) = 8 + 2log(m) / 2 + 1 + 2log(m) / 2 - 1 + log(m) + 1 + 3log(m) = 8 + 2log(m) + 4log(m) + 1 = 6log(m) + 9;
+T(n) = 5n - 4 + (n - 1)(6log(n - 1) + 9) = 5n - 4 + 9n - 9 + n*6log(n - 1);
+=> 14n - 13 + n*log(n)
+=> n + n*log(n)
+=> n*log(n)
