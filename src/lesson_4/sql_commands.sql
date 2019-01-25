@@ -60,3 +60,9 @@ INSERT INTO table2 (column1, column2, column3, ...)
 SELECT column1, column2, column3, ...
 FROM table1
 WHERE condition;
+
+/*lesson 5*/
+SELECT p.*, c.name as category_name FROM products as p JOIN categories as c ON p.category_id = c.id
+-- USING(category_id) === ON p.category_id = c.category_id
+SELECT products.*, c.name as category_name, c.description as category_description FROM products LEFT JOIN categories c ON category_id = c.id WHERE c.id IS NULL;
+-- 33 slide

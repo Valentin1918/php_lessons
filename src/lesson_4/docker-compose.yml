@@ -14,6 +14,14 @@ services:
     volumes:
      - mysqldata:/var/lib/mysql
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+     - "8008:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+
 volumes:
   mysqldata:
     driver: "local"
