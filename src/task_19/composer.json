@@ -1,0 +1,12 @@
+{
+  "name": "task/19",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app"
+    },
+    "classmap": [
+      "app/Employee.php",
+      "app/User.php"
+    ]
+  }
+}
