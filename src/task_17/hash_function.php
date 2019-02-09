@@ -1,9 +1,16 @@
 <?php
 require __DIR__ . '/LinkedList.php';
-$n = 1000000000000000;
+$n = 10000;
 $data = [];
+
+function quickRandom($length = 16)
+{
+    $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
+}
+
 for ( $i = 0; $i< $n; $i++) {
-    $data[$i] = ''; // str random str_random Laravel
+    $data[$i] = quickRandom(); // str random str_random Laravel
 }
 function hashFunction($row, $n) {
     $count = strlen($row);
@@ -23,23 +30,37 @@ $hashTable = [
 ];
 for ($i = 0; $i < count($data); $i++) {
     $index = hashFunction($data[$i], count($data));
+//    echo $index.' '.$data[$i].PHP_EOL;
     if(empty($hashTable[$index])) {
         $hashTable[$index] = $data[$i];
         continue;
     }
     if ($hashTable[$index] instanceof LinkedList) {
-        // todo last item
-        // todo link new item
+        $hashTable[$index]->append($index, $data[$i]);
         continue;
     }
-    // todo convert simple value to Separate Object
-    // todo insert into new linked list
+    $hashTable[$index] = new LinkedList();
+    $hashTable[$index]->append($index, $data[$i]);
 }
-echo json_encode($hashTable);
-// todo get element by hash id
-$index = hashFunction('ada', 5);
-// find by index value in hash table
-// todo check if value !exist => throw exception
-// todo check if value is simple obj => return
-// todo check if value is linked list
-// todo linear search in this linked list
+
+//var_export($hashTable);
+
+$getElementByHash = function ($index) use (&$hashTable) {
+    $element = $hashTable[$index];
+    if(empty($element)) {
+        throw new Exception('There is no such element!');
+    }
+    if ($element instanceof LinkedList) {
+        try {
+            return $element->search($index);
+        } catch (Exception $e) {
+            throw new Exception('There is no such element in linkedList!');
+        }
+    }
+    return $element;
+};
+
+$index = hashFunction('lz95CSxlepswtZzQ', $n);
+echo PHP_EOL.$index.PHP_EOL;
+$result = $getElementByHash($index);
+var_export($result);
