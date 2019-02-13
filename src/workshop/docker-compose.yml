@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+
+  php:
+    image: vsguts/php71-fpm:1.0.0
+    #image: php:7.2-fpm
+    volumes:
+      - .:/app
+      - ./docker/logs/php:/var/log/php
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/app
+      - ./docker/config/nginx:/etc/nginx/conf.d
+      - ./docker/logs/nginx:/var/log/nginx
+
+  mysql:
+    image: mysql:5.7.21
+    ports:
+     - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE:      catalog
+      MYSQL_USER:          catalog
+      MYSQL_PASSWORD:      catalog
+    volumes:
+     - mysqldata:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+     - "8008:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+
+volumes:
+  mysqldata:
+    driver: "local"
