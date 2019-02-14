@@ -1,12 +1,14 @@
 <?php
 namespace App\Controllers;
 
+use App\View\StringView;
+
 class IndexController
 {
 
     public function index()
     {
-        echo "Hi! Index.";
+        return new StringView("Hi! Index.");
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 namespace App\Http;
 
-class Request
+class Request implements RequestInterface
 {
     public function getQueryParams()
     {
@@ -11,5 +11,11 @@ class Request
     public function getMethod()
     {
         return $_SERVER['REQUEST_METHOD'];
+    }
+
+    public function getPath()
+    {
+        $parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+        return $parts[0];
     }
 }

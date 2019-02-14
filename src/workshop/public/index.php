@@ -13,6 +13,8 @@ $router = require __DIR__.'/../routes/routes.php';
 $app = new \App\Application($router);
 $request = new \App\Http\Request();
 $app->handleRequest($request);
+//echo $res;
+
 //p($request->getMethod(), $request->getQueryParams());
 //p($router);
 
