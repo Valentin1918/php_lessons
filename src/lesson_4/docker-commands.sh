@@ -2,6 +2,8 @@
 
 docker ps
 docker volume ls
+docker ps #whole containers
+docker kill containerId # docker-compose up -d will up all needed containers
 docker-compose up #from the folder with docker-compose.yml ctrl+C for quit
 docker-compose down
 docker-compose up -d #in daemon (doesn't block a console)
